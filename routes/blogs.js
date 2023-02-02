@@ -85,21 +85,16 @@ router.delete('/delete/:blogToDelete', (req, res) => {
 
 router.post('/create-one', (req, res) => {
     try {
-        const title = req.body.title;
-        const author = req.body.author;
-        const category = req.body.category;
-        const createdAt = new Date();
-        const lastModified = new Date();
-        const newBlog = {
-            title,
-            author,
-            category,
-            createdAt,
-            lastModified
+     const newBlog = {
+            title : req.body.title,
+            author : req.body.author,
+            category : req.body.category,
+            createdAt : new Date(),
+            lastModified :  new Date()
 
         }
         dataCheck = validation(newBlog);
-        
+
         if (dataCheck.isValid === false) {
             throw Error(dataCheck.message)
         }
