@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { validation } = require('./validation/blogs')
 
 const sampleBlogs = [
     {
@@ -69,20 +70,53 @@ router.get('/single/:blogTitleToGet', (req, res, next) => {
 
 
 
-router.delete('/delete/:blogToDelete',(req,res)=>{
-    const deletedBlog = sampleBlogs.findIndex(blog =>{
+router.delete('/delete/:blogToDelete', (req, res) => {
+    const deletedBlog = sampleBlogs.findIndex(blog => {
         return req.params.blogToDelete === blog.title
     })
 
-    sampleBlogs.splice(deletedBlog,1)
+    sampleBlogs.splice(deletedBlog, 1)
 
     res.json({
-        success:true,
+        success: true,
         blogs: sampleBlogs
     })
 })
 
+router.post('/create-one', (req, res) => {
+    try {
+        const title = req.body.title;
+        const author = req.body.author;
+        const category = req.body.category;
+        const createdAt = new Date();
+        const lastModified = new Date();
+        const newBlog = {
+            title,
+            author,
+            category,
+            createdAt,
+            lastModified
 
+        }
+        dataCheck = validation(newBlog);
+        
+        if (dataCheck.isValid === false) {
+            throw Error(dataCheck.message)
+        }
+
+        sampleBlogs.push(newBlog)
+        res.json({
+            success: true,
+            blog: newBlog
+        })
+    }catch (e){
+        console.log(e);
+        res.json({
+            success:false,
+            error: String(e)
+        })
+    }
+})
 
 
 
