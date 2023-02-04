@@ -113,6 +113,52 @@ router.post('/create-one', (req, res) => {
     }
 })
 
+router.put('update-blog/:titleToUpdate',(req,res)=>{
+
+
+    const blogNameToFind = req.params.title
+	
+	const originalBlog = sampleBlogs.find((blog)=>{
+		return blog.name === blogNameToFind
+	})
+	const originalBlogIndex = sampleBlogs.findIndex((blog)=>{
+		return blog.name ===blogNameToFind
+	})
+
+	if (!originalBlog) {
+		res.json({
+			success: false,
+			message: "Could not find blog in list"
+		})
+		return
+	}
+
+	const updatedBlog = {}
+
+	if (req.body.title !== undefined){
+		updatedBlog.title = req.body.title
+	} else {
+		updatedBlog.title = originalDog.title
+	}
+
+	if (req.body.category !== undefined){
+		updatedDog.category = req.body.category
+	} else {
+		updatedDog.category = originalDog.category
+	}
+
+	if (req.body.author !== undefined){
+		updatedDog.author = req.body.author
+	} else {
+		updatedDog.author = originalDog.author
+	}
+
+	sampleBlogs[originalBlogIndex] = updatedBlog
+
+	res.json({
+		success: true
+	})
+})
 
 
 
